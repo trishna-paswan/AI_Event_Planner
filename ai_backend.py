@@ -1,148 +1,134 @@
-# ai_backend.py
-
-import os
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 import csv
-import smtplib
-from email.message import EmailMessage
-from sklearn.linear_model import LinearRegression
-import pandas as pd
-from difflib import get_close_matches
-from twilio.rest import Client
-from dotenv import load_dotenv
+import os
 
-# Load environment variables from .env file for Twilio & Email
-load_dotenv()
+from utils import predict_budget, save_event, find_matching_speakers, load_events
+from reminders import start_scheduler
 
-# Ensure data folder exists
-def ensure_data_folder():
-    os.makedirs("data", exist_ok=True)
+app = Flask(__name__)
+app.secret_key = 'your_secret_key_here'  # change to a secure key
 
-
-# ----------------------------
-# USER AUTHENTICATION
-# ----------------------------
-
-def register_user(username, password, email):
-    with open("data/users.csv", mode="a", newline="") as file:
-        csv.writer(file).writerow([username, password, email])
-    return True
+# Ensure data folder and user CSV exist
+os.makedirs('data', exist_ok=True)
+USERS_CSV = "data/users.csv"
+if not os.path.exists(USERS_CSV):
+    with open(USERS_CSV, 'w', newline='') as f:
+        csv.writer(f).writerow(["username", "password", "email"])
 
 def login_user(username, password):
-    try:
-        with open("data/users.csv", mode="r") as file:
-            for row in csv.reader(file):
-                if len(row) >= 3 and row[0] == username and row[1] == password:
-                    return row[2]  # return user's email
-    except FileNotFoundError:
-        return None
+    with open(USERS_CSV, mode="r") as f:
+        for row in csv.reader(f):
+            if len(row) >= 3 and row[0] == username and row[1] == password:
+                return row[2]
     return None
 
+def register_user(username, password, email):
+    with open(USERS_CSV, mode="a", newline="") as f:
+        csv.writer(f).writerow([username, password, email])
+    return True
 
-# ----------------------------
-# TASK SUGGESTIONS
-# ----------------------------
+@app.route('/')
+def home():
+    return redirect(url_for('login'))
 
-def suggest_tasks(event_type):
-    task_dict = {
-        "Tech Talk": ["Book keynote speaker", "Design promotional posters", "Test audio-visual setup", "Schedule networking session"],
-        "Workshop": ["Finalize workshop topic", "Arrange venue & kits", "Distribute certificates", "Collect participant feedback"],
-        "Hackathon": ["Set problem statement", "Organize sponsors & prizes", "Form judging panel", "Plan team mentoring sessions"],
-        "Webinar": ["Create registration form", "Conduct dry run", "Email reminder to attendees", "Share recording post-session"]
-    }
-    return task_dict.get(event_type, ["Brainstorm idea", "Plan logistics", "Execute event", "Evaluate outcome"])
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        uname = request.form['username']
+        pwd = request.form['password']
+        email = login_user(uname, pwd)
+        if email:
+            session['username'] = uname
+            session['email'] = email
+            return redirect(url_for('dashboard'))
+        flash("Invalid username or password")
+    return render_template('login.html')
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        uname = request.form['username']
+        pwd = request.form['password']
+        email = request.form['email']
+        register_user(uname, pwd, email)
+        flash("Registered successfully! Please log in.")
+        return redirect(url_for('login'))
+    return render_template('register.html')
+
+@app.route('/dashboard')
+def dashboard():
+    if not session.get('username'):
+        return redirect('/login')
+    return render_template("dashboard.html", username=session['username'])
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('login'))
+
+@app.route('/add_event', methods=['GET', 'POST'])
+def add_event():
+    if not session.get('username'):
+        return redirect('/login')
+
+    if request.method == 'POST':
+        name = request.form['event_name']
+        date = request.form['date']
+        time = request.form['time']
+        topic = request.form['topic']
+        budget = float(request.form['budget'])
+        email = request.form['email']
+        whatsapp = request.form['whatsapp']
+
+        predicted_budget = predict_budget(budget)
+        save_event(name, date, time, topic, email, whatsapp, predicted_budget)
+
+        flash(f"Event '{name}' scheduled with predicted budget ₹{predicted_budget:.2f}!")
+        return redirect('/dashboard')
+
+    return render_template('add_event.html')
+
+@app.route('/speakers', methods=['GET', 'POST'])
+def speakers():
+    if not session.get('username'):
+        return redirect('/login')
+
+    matched_speakers = []
+    searched = False
+    input_topic = ""
+
+    if request.method == 'POST':
+        input_topic = request.form['topic']
+        matched_speakers = find_matching_speakers(input_topic)
+        searched = True
+
+    return render_template("speakers.html", matched_speakers=matched_speakers, searched=searched, input_topic=input_topic)
+
+@app.route("/calendar")
+def calendar():
+    if not session.get('username'):
+        return redirect('/login')
+    return render_template("calendar.html")
+
+@app.route("/events")
+def api_events():
+    events = load_events()
+    calendar_data = [
+        {"title": event["event_name"], "start": event["date"]}
+
+        for event in events
+    ]
+    return jsonify(calendar_data)
+
+@app.route('/view_events')
+def view_events():
+    if not session.get('username'):
+        return redirect('/login')
+
+    events = load_events()
+    return render_template("events.html", events=events)
 
 
-# ----------------------------
-# BUDGET PREDICTION USING ML
-# ----------------------------
-
-def predict_budget(event_type, participants, duration):
-    try:
-        df = pd.read_csv("data/budget_data.csv")
-        X = df[["participants", "duration"]]
-        y = df["budget"]
-        model = LinearRegression().fit(X, y)
-
-        input_data = pd.DataFrame([[participants, duration]], columns=["participants", "duration"])
-        predicted_budget = model.predict(input_data)
-        return round(predicted_budget[0], 2)
-    except Exception as e:
-        print("Budget Prediction Error:", e)
-        return "Estimation Failed"
-
-
-# ----------------------------
-# EVENT DATA HANDLING
-# ----------------------------
-
-def save_event(username, name, event_type, date, tasks, budget, whatsapp):
-    with open("data/events.csv", mode="a", newline="") as file:
-        csv.writer(file).writerow([username, name, event_type, date, budget, whatsapp] + tasks)
-
-def load_events(username):
-    events = []
-    try:
-        with open("data/events.csv", mode="r") as file:
-            for row in csv.reader(file):
-                if row[0] == username:
-                    events.append(row)
-    except FileNotFoundError:
-        pass
-    return events
-
-
-# ----------------------------
-# SPEAKER SUGGESTION
-# ----------------------------
-
-def find_speakers(topic):
-    try:
-        df = pd.read_csv("data/speakers.csv")
-        matches = []
-        for _, row in df.iterrows():
-            if topic.lower() in row['expertise'].lower() or get_close_matches(topic.lower(), [row['expertise'].lower()]):
-                matches.append(f"{row['name']} | Expertise: {row['expertise']} | Contact: {row['email']}")
-        return matches if matches else ["No relevant speakers found"]
-    except Exception as e:
-        print("Speaker Search Error:", e)
-        return ["Speaker database unavailable"]
-
-
-# ----------------------------
-# EMAIL REMINDER
-# ----------------------------
-
-def send_email_reminder(to_email, subject, body):
-    try:
-        msg = EmailMessage()
-        msg.set_content(body)
-        msg['Subject'] = subject
-        msg['From'] = os.getenv("EMAIL_ID")  # from .env
-        msg['To'] = to_email
-
-        with smtplib.SMTP("smtp.gmail.com", 587) as smtp:
-            smtp.starttls()
-            smtp.login(os.getenv("EMAIL_ID"), os.getenv("EMAIL_PASSWORD"))
-            smtp.send_message(msg)
-    except Exception as e:
-        print("Email Error:", e)
-
-
-# ----------------------------
-# WHATSAPP REMINDER
-# ----------------------------
-
-def send_whatsapp_reminder(to_number, body):
-    try:
-        account_sid = os.getenv("TWILIO_SID")
-        auth_token = os.getenv("TWILIO_TOKEN")
-        client = Client(account_sid, auth_token)
-
-        client.messages.create(
-            body=body,
-            from_='whatsapp:+14155238886',
-            to='whatsapp:' + to_number
-        )
-    except Exception as e:
-        print("WhatsApp Error:", e)
-
+if __name__ == "__main__":
+    start_scheduler()
+    app.run(debug=True)
