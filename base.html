@@ -1,0 +1,115 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Planova AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Dark mode logic using localStorage
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                html.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-white transition-colors duration-300">
+
+<header class="flex justify-between items-center bg-white dark:bg-gray-800 px-6 py-4 shadow">
+    <div class="flex items-center gap-3">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="h-10">
+        <h1 class="text-xl font-bold">Planova AI</h1>
+    </div>
+    <div class="flex gap-4 items-center">
+        {% if session.get('username') %}
+            <a href="/dashboard" class="text-blue-600 dark:text-blue-400 hover:underline">Dashboard</a>
+            <a href="/logout" class="text-red-500 hover:underline">Logout</a>
+        {% endif %}
+        <button onclick="toggleDarkMode()" class="px-3 py-1 text-sm border rounded dark:border-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700">
+            Toggle Theme
+        </button>
+    </div>
+</header>
+
+<main class="p-6 max-w-6xl mx-auto animate-fadeIn">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4">
+                {{ messages[0] }}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+</main>
+
+<style>
+    @keyframes slideUp {
+      from { transform: translateY(40px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .animate-slideUp {
+      animation: slideUp 0.4s ease-out both;
+    }
+    </style>
+    
+<!-- Toast Container -->
+<div id="toast-container" class="fixed top-4 right-4 z-50 space-y-4">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="toast {{ category }} max-w-sm px-4 py-3 rounded shadow-lg text-white text-sm animate-fadeIn"
+             role="alert">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endwith %}
+  </div>
+  
+  <!-- Tailwind-based Toast Styles -->
+  <style>
+    .toast.success {
+      @apply bg-green-600 dark:bg-green-500;
+    }
+  
+    .toast.error {
+      @apply bg-red-600 dark:bg-red-500;
+    }
+  
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateX(30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+  
+    @keyframes fadeOut {
+      0%, 90% { opacity: 1; }
+      100% { opacity: 0; display: none; }
+    }
+  
+    .animate-fadeIn {
+      animation: fadeIn 0.4s ease-out, fadeOut 4.5s ease-in forwards;
+    }
+  </style>
+  
+  <!-- Auto-remove Toast after fade -->
+  <script>
+    setTimeout(() => {
+      document.querySelectorAll('.toast').forEach(el => el.remove());
+    }, 5000);
+  </script>
+  
+</body>
+</html>
