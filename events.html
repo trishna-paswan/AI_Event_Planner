@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="animate-fadeIn">
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h2 class="text-3xl font-bold">Your Scheduled Events</h2>
+            <p class="text-gray-600 dark:text-gray-300">Review and manage your upcoming events.</p>
+        </div>
+
+        <!-- (Optional) Future Filter Input -->
+        <input type="text" placeholder="Search by topic or date..." 
+               class="px-4 py-2 border rounded-lg dark:bg-gray-700 dark:text-white dark:border-gray-600 w-64"
+               disabled />
+    </div>
+
+    {% if events %}
+        <div class="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            {% for event in events %}
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-xl transition-transform hover:scale-[1.02] duration-200">
+                    <h3 class="text-xl font-semibold text-indigo-700 dark:text-indigo-400 mb-2">{{ event.event_name }}</h3>
+                    
+                    <div class="text-sm text-gray-700 dark:text-gray-300 space-y-1">
+                        <p><strong>Date:</strong> {{ event.date }}</p>
+                        <p><strong>Time:</strong> {{ event.time }}</p>
+                        <p><strong>Topic:</strong> {{ event.topic }}</p>
+                        <p><strong>Email:</strong> {{ event.email }}</p>
+                        <p><strong>WhatsApp:</strong> {{ event.whatsapp }}</p>
+                        <p><strong>Predicted Budget:</strong> ₹{{ event.predicted_budget }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="bg-yellow-100 dark:bg-yellow-300 text-yellow-800 dark:text-yellow-900 p-4 rounded-lg mt-4">
+            No events found. <a href="{{ url_for('add_event') }}" class="text-blue-700 underline">Add one now →</a>
+        </div>
+    {% endif %}
+</section>
+
+{% endblock %}
