@@ -7,7 +7,7 @@ from reminders import start_scheduler
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'  # change to a secure key
-
+ 
 # Ensure data folder and user CSV exist
 os.makedirs('data', exist_ok=True)
 USERS_CSV = "data/users.csv"
