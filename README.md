@@ -21,7 +21,7 @@ Predict expected budgets using `LinearRegression` from historical data.
 💬 **WhatsApp & Email Reminders**  
 Send automated event reminders to participants using Twilio & SMTP.
 
-🛡️ **Secure Credential Management**  
+🛡️ **Secure Credential Management**   
 Twilio credentials are loaded securely from `.env` using `python-dotenv`.
 
 🌙 **Background Scheduler**  
