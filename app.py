@@ -12,7 +12,7 @@ app.secret_key = 'your_secret_key_here'  # change to a secure key
 os.makedirs('data', exist_ok=True)
 USERS_CSV = "data/users.csv"
 if not os.path.exists(USERS_CSV):
-    with open(USERS_CSV, 'w', newline='') as f:
+    with open(USERS_CSV, 'w', newline='') as f: 
         csv.writer(f).writerow(["username", "password", "email"])
 
 def login_user(username, password):
