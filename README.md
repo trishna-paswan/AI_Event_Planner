@@ -15,7 +15,7 @@ Get context-aware task recommendations tailored to event types like workshops, w
 🎤 **Smart Speaker Suggestions**  
 Suggests speakers from a domain-based database (`speakers.csv`) with fuzzy matching (via `difflib`).
 
-📉 **Budget Forecasting with Machine Learning**  
+📉 **Budget Forecasting with Machine Learning**   
 Predict expected budgets using `LinearRegression` from historical data.
 
 💬 **WhatsApp & Email Reminders**  
