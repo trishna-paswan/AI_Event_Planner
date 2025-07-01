@@ -1,6 +1,5 @@
 import smtplib
 from email.mime.text import MIMEText
-
 def send_email(to_email, event_name):
     msg = MIMEText(f"Reminder: Your event '{event_name}' is scheduled soon!")
     msg['Subject'] = f"Event Reminder: {event_name}"
