@@ -7,7 +7,7 @@ An intelligent, all-in-one desktop event management system built with **Python &
 ## 🔥 Key Features
 
 🎯 **Event Creation & Calendar Integration**  
-Plan events with a clean, intuitive calendar UI using `tkcalendar`.
+Plan events with a clean, intuitive calendar UI using `tkcalendar`. 
 
 🧠 **AI-Powered Task Suggestions**  
 Get context-aware task recommendations tailored to event types like workshops, webinars, etc.
