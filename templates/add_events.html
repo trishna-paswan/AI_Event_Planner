@@ -1,11 +1,29 @@
-{% extends "base.html" %}
-{% block content %}
-<h2 class="text-2xl font-bold mb-4">Add New Event</h2>
-<form method="POST" class="space-y-4 max-w-lg">
-  <input name="title" placeholder="Event Title" class="w-full p-2 border rounded" required>
-  <input name="date" type="date" class="w-full p-2 border rounded" required>
-  <textarea name="description" placeholder="Event Description" class="w-full p-2 border rounded" rows="4"></textarea>
-  <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Add Event</button>
-</form>
-{% endblock %}
+function startConfetti() {
+  const duration = 5 * 1000;
+  const animationEnd = Date.now() + duration;
+  const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 1000 };
 
+  function randomInRange(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  const interval = setInterval(function () {
+    const timeLeft = animationEnd - Date.now();
+
+    if (timeLeft <= 0) {
+      return clearInterval(interval);
+    }
+
+    confetti(Object.assign({}, defaults, {
+      particleCount: 50,
+      origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+    }));
+    confetti(Object.assign({}, defaults, {
+      particleCount: 50,
+      origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+    }));
+  }, 250);
+}
+
+// Include confetti library from CDN in base.html if not already:
+// <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
