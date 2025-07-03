@@ -1,79 +1,21 @@
+
 {% extends "base.html" %}
 {% block content %}
-
-<!-- Welcome Heading -->
-<div class="text-center mb-10">
-  <h2 class="text-3xl font-bold mb-2 animate-fadeIn">Welcome, {{ username }} 👋</h2>
-  <p class="text-gray-600 dark:text-gray-300">Manage your events with AI-powered tools.</p>
+<h2 class="text-3xl font-bold mb-6">Welcome to Your Dashboard</h2>
+<a href="/add-event" class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add New Event</a>
+<div class="mt-6">
+  {% if events %}
+    <ul class="space-y-4">
+      {% for event in events %}
+        <li class="border p-4 rounded shadow">
+          <h3 class="text-xl font-semibold">{{ event.title }}</h3>
+          <p class="text-sm text-gray-600">{{ event.date }}</p>
+          <p>{{ event.description }}</p>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No events scheduled yet.</p>
+  {% endif %}
 </div>
-
-<!-- Add Event Modal Trigger Button -->
-<div class="flex justify-end mb-6">
-  <button onclick="toggleModal(true)" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition">
-    + Add Event
-  </button>
-</div>
-
-<!-- Cards -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-  <!-- View Events Card -->
-  <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-xl transition-transform duration-200 hover:scale-105 animate-fadeIn">
-    <h3 class="text-lg font-semibold text-green-700 dark:text-green-400 mb-2">View Events</h3>
-    <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">See all your upcoming planned events.</p>
-    <a href="{{ url_for('view_events') }}" class="inline-block text-sm text-white bg-green-600 px-4 py-2 rounded hover:bg-green-700 transition">Go →</a>
-  </div>
-
-  <!-- Find Speakers Card -->
-  <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-xl transition-transform duration-200 hover:scale-105 animate-fadeIn">
-    <h3 class="text-lg font-semibold text-blue-700 dark:text-blue-400 mb-2">Find Speakers</h3>
-    <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">AI matches the best speakers for your topic.</p>
-    <a href="/speakers" class="inline-block text-sm text-white bg-blue-600 px-4 py-2 rounded hover:bg-blue-700 transition">Go →</a>
-  </div>
-</div>
-
-<!-- Event Creation Modal -->
-<div id="eventModal" class="fixed inset-0 z-50 bg-black bg-opacity-50 backdrop-blur-sm hidden items-center justify-center">
-  <div class="bg-white dark:bg-gray-800 p-6 rounded-xl w-full max-w-lg shadow-lg animate-slideUp">
-    <div class="flex justify-between items-center mb-4">
-      <h2 class="text-xl font-bold">Create a New Event</h2>
-      <button onclick="toggleModal(false)" class="text-gray-600 dark:text-gray-300 hover:text-red-500 text-2xl">&times;</button>
-    </div>
-
-    <form method="POST" action="/add_event" class="space-y-4">
-      <input type="text" name="event_name" placeholder="Event Name" required class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:text-white" />
-      <input type="date" name="date" required class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:text-white" />
-      <input type="time" name="time" required class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:text-white" />
-      <input type="text" name="topic" placeholder="Topic" required class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:text-white" />
-      <input type="number" name="budget" placeholder="Estimated Budget (₹)" required class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:text-white" />
-      <input type="email" name="email" placeholder="Coordinator Email" required class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:text-white" />
-      <input type="tel" name="whatsapp" placeholder="WhatsApp (+91...)" required class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:text-white" />
-
-      <div class="flex justify-end gap-2">
-        <button type="button" onclick="toggleModal(false)" class="px-4 py-2 border rounded hover:bg-gray-100 dark:hover:bg-gray-700">Cancel</button>
-        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">Add Event</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<!-- Modal Toggle Script -->
-<script>
-  function toggleModal(show) {
-    const modal = document.getElementById("eventModal");
-    if (show) {
-      modal.classList.remove("hidden");
-      modal.classList.add("flex");
-    } else {
-      modal.classList.add("hidden");
-      modal.classList.remove("flex");
-    }
-  }
-
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") {
-      toggleModal(false);
-    }
-  });
-</script>
-
 {% endblock %}
