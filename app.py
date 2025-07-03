@@ -1,31 +1,19 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify 
-import csv  
+# 1. app.py 
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
+from models import db, User, Event
+from twilio_reminder import send_whatsapp_reminder
+from face_recognition_utils import verify_face
 import os
-
-from utils import predict_budget, save_event, find_matching_speakers, load_events
-from reminders import start_scheduler
+from datetime import datetime
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key_here'  # change to a secure key
- 
-# Ensure data folder and user CSV exist
-os.makedirs('data', exist_ok=True)
-USERS_CSV = "data/users.csv"
-if not os.path.exists(USERS_CSV):
-    with open(USERS_CSV, 'w', newline='') as f: 
-        csv.writer(f).writerow(["username", "password", "email"])
+app.secret_key = 'supersecretkey'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['UPLOAD_FOLDER'] = 'uploads/'
+db.init_app(app)
 
-def login_user(username, password):
-    with open(USERS_CSV, mode="r") as f:
-        for row in csv.reader(f):
-            if len(row) >= 3 and row[0] == username and row[1] == password:
-                return row[2]
-    return None
-
-def register_user(username, password, email):
-    with open(USERS_CSV, mode="a", newline="") as f:
-        csv.writer(f).writerow([username, password, email])
-    return True
+with app.app_context():
+    db.create_all()
 
 @app.route('/')
 def home():
@@ -34,101 +22,65 @@ def home():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        uname = request.form['username']
-        pwd = request.form['password']
-        email = login_user(uname, pwd)
-        if email:
-            session['username'] = uname
-            session['email'] = email
-            return redirect(url_for('dashboard'))
-        flash("Invalid username or password")
+        username = request.form['username']
+        password = request.form['password']
+        user = User.query.filter_by(username=username, password=password).first()
+        if user:
+            session['user_id'] = user.id
+            return render_template('login.html', success=True)  # triggers confetti
+        flash('Invalid credentials')
     return render_template('login.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        uname = request.form['username']
-        pwd = request.form['password']
-        email = request.form['email']
-        register_user(uname, pwd, email)
-        flash("Registered successfully! Please log in.")
+        username = request.form['username']
+        password = request.form['password']
+        image = request.files['face']
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
+        image.save(filepath)
+        user = User(username=username, password=password, face_image=image.filename)
+        db.session.add(user)
+        db.session.commit()
         return redirect(url_for('login'))
     return render_template('register.html')
 
 @app.route('/dashboard')
 def dashboard():
-    if not session.get('username'):
-        return redirect('/login')
-    return render_template("dashboard.html", username=session['username'])
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    events = Event.query.filter_by(user_id=session['user_id']).all()
+    return render_template('dashboard.html', events=events)
 
-@app.route('/logout')
-def logout():
-    session.clear()
-    return redirect(url_for('login'))
-
-@app.route('/add_event', methods=['GET', 'POST'])
+@app.route('/add-event', methods=['GET', 'POST'])
 def add_event():
-    if not session.get('username'):
-        return redirect('/login')
-
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
     if request.method == 'POST':
-        name = request.form['event_name']
+        title = request.form['title']
         date = request.form['date']
-        time = request.form['time']
-        topic = request.form['topic']
-        budget = float(request.form['budget'])
-        email = request.form['email']
-        whatsapp = request.form['whatsapp']
-
-        predicted_budget = predict_budget(budget)
-        save_event(name, date, time, topic, email, whatsapp, predicted_budget)
-
-        flash(f"Event '{name}' scheduled with predicted budget ₹{predicted_budget:.2f}!")
-        return redirect('/dashboard')
-
+        description = request.form['description']
+        event = Event(title=title, date=date, description=description, user_id=session['user_id'])
+        db.session.add(event)
+        db.session.commit()
+        send_whatsapp_reminder('+91XXXXXXXXXX', title, date)  # Replace with dynamic phone number
+        return redirect(url_for('dashboard'))
     return render_template('add_event.html')
 
-@app.route('/speakers', methods=['GET', 'POST'])
-def speakers():
-    if not session.get('username'):
-        return redirect('/login')
-
-    matched_speakers = []
-    searched = False
-    input_topic = ""
-
-    if request.method == 'POST':
-        input_topic = request.form['topic']
-        matched_speakers = find_matching_speakers(input_topic)
-        searched = True
-
-    return render_template("speakers.html", matched_speakers=matched_speakers, searched=searched, input_topic=input_topic)
-
-@app.route("/calendar")
+@app.route('/calendar')
 def calendar():
-    if not session.get('username'):
-        return redirect('/login')
-    return render_template("calendar.html")
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    events = Event.query.filter_by(user_id=session['user_id']).all()
+    return render_template('calendar.html', events=events)
 
-@app.route("/events")
-def api_events():
-    events = load_events()
-    calendar_data = [
-        {"title": event["event_name"], "start": event["date"]}
+@app.route('/verify-face', methods=['POST'])
+def verify_face_route():
+    uploaded = request.files['face']
+    filepath = os.path.join(app.config['UPLOAD_FOLDER'], uploaded.filename)
+    uploaded.save(filepath)
+    is_valid = verify_face(session['user_id'], filepath)
+    return jsonify({'valid': is_valid})
 
-        for event in events
-    ]
-    return jsonify(calendar_data)
-
-@app.route('/view_events')
-def view_events():
-    if not session.get('username'):
-        return redirect('/login')
-
-    events = load_events()
-    return render_template("events.html", events=events)
-
-
-if __name__ == "__main__":
-    start_scheduler()
+if __name__ == '__main__':
     app.run(debug=True)
