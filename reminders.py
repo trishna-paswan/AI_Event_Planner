@@ -1,28 +1,28 @@
+# 3. twilio_reminder.py
+from twilio.rest import Client
+from dotenv import load_dotenv
+import os
 
-from apscheduler.schedulers.background import BackgroundScheduler
-from datetime import datetime
-from utils import load_events
-from mail_utils import send_email
-from whatsapp_utils import send_whatsapp
 
-scheduler = BackgroundScheduler()
+load_dotenv()  # Load .env file
 
-def schedule_reminders():
-    events = load_events()  # Load from CSV
-    for event in events:
-        name = event['event_name']
-        date_str = event['date']
-        email = event['email']
-        whatsapp = event['whatsapp']
+def send_whatsapp_reminder(phone_number, event_title, event_date):
+    account_sid = os.environ.get('TWILIO_ACCOUNT_SID')
+    auth_token = os.environ.get('TWILIO_AUTH_TOKEN')
+    from_whatsapp_number = 'whatsapp:+14155238886'
+    
+    if not account_sid or not auth_token:
+        print("Twilio credentials not set.")
+        return
 
-        try:
-            run_time = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
-            scheduler.add_job(send_email, 'date', run_date=run_time, args=[email, name])
-            scheduler.add_job(send_whatsapp, 'date', run_date=run_time, args=[whatsapp, name])
-            print(f"Scheduled reminders for {name} on {run_time}")
-        except Exception as e:
-            print(f"Error scheduling event: {name}, {e}")
+    client = Client(account_sid, auth_token)
+    message_body = f"Reminder: Your event '{event_title}' is scheduled for {event_date}."
 
-def start_scheduler():
-    schedule_reminders()
-    scheduler.start()
+    message = client.messages.create(
+        body=message_body,
+        from_=from_whatsapp_number,
+        to=f'whatsapp:{phone_number}'
+    )
+
+    print(f"WhatsApp reminder sent: SID {message.sid}")
+
