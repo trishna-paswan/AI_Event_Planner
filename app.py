@@ -1,5 +1,4 @@
 # 1. app.py 
-
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from models import db, User, Event
 from twilio_reminder import send_whatsapp_reminder
