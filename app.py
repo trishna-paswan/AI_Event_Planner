@@ -5,7 +5,6 @@ from twilio_reminder import send_whatsapp_reminder
 from face_recognition_utils import verify_face
 import os
 from datetime import datetime
-
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
