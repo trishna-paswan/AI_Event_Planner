@@ -1,7 +1,7 @@
 # 🧠 AI Event Planner
 
 An intelligent, all-in-one desktop event management system built with **Python & Tkinter**. This app combines the power of **AI**, **automation**, and a beautifully designed GUI to streamline planning for workshops, webinars, seminars, and more. 
-
+ 
 ---
 
 ## 🔥 Key Features 
