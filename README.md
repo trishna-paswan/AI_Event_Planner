@@ -28,7 +28,6 @@ Twilio credentials are loaded securely from `.env` using `python-dotenv`.
 Uses `APScheduler` to run jobs without blocking the GUI.
 
 ---
-
  
 ## 📂 Folder Structure
 
