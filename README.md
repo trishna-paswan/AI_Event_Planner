@@ -4,7 +4,6 @@ An intelligent, all-in-one desktop event management system built with **Python &
 
 ---
 
-
 ## 🔥 Key Features
 
 🎯 **Event Creation & Calendar Integration**  
