@@ -1,3 +1,4 @@
+
 function startConfetti() {
   const duration = 5 * 1000;
   const animationEnd = Date.now() + duration;
