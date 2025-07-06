@@ -29,6 +29,7 @@ Uses `APScheduler` to run jobs without blocking the GUI.
 
 ---
 
+ 
 ## 📂 Folder Structure
 
 AI_Event_Planner/
