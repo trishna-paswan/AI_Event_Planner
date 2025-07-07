@@ -9,6 +9,7 @@ def verify_face(user_id, uploaded_path):
     user = User.query.get(user_id)
     if not user or not user.face_image:
         return False
+        
 
     try:
         stored_image_path = os.path.join('uploads', user.face_image)
