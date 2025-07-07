@@ -3,6 +3,7 @@ import face_recognition
 import os
 from models import User
 
+
 def verify_face(user_id, uploaded_path):
     user = User.query.get(user_id)
     if not user or not user.face_image:
