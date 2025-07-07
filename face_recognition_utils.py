@@ -1,5 +1,4 @@
 # 4. face_recognition_utils.py
-
 import face_recognition
 import os
 from models import User
