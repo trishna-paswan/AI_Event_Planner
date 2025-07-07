@@ -3,7 +3,6 @@
 from twilio.rest import Client
 from dotenv import load_dotenv
 import os
-
 load_dotenv()  # Load .env file
 
 def send_whatsapp_reminder(phone_number, event_title, event_date):
