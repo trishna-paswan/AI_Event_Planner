@@ -10,7 +10,6 @@ def verify_face(user_id, uploaded_path):
     if not user or not user.face_image:
         return False
         
-
     try:
         stored_image_path = os.path.join('uploads', user.face_image)
         known_image = face_recognition.load_image_file(stored_image_path)
