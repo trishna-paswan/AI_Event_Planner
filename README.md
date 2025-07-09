@@ -17,7 +17,7 @@ Create a unique link for your loved ones filled with:
 ---
 
 ## 🚀 Demo
-✨ [Live Demo Here](https://your-happypage-app.onrender.com) *(Add your Render link once deployed)*
+✨ [Live Demo Here](https://happypage.onrender.com)
 
 ---
 
