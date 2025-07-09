@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Memories</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* 🌀 Smooth horizontal scroll animation */
+    @keyframes scroll {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+    .animate-scroll {
+      display: flex;
+      width: max-content;
+      animation: scroll 20s linear infinite;
+    }
+    .photo-container {
+      flex: 0 0 auto;
+    }
+
+    /* ❤️ Floating Hearts */
+    .heart {
+      position: absolute;
+      color: #f472b6; /* pastel pink */
+      font-size: 1.5rem;
+      animation: floatHeart 10s ease-in-out infinite;
+      opacity: 0.7;
+    }
+    @keyframes floatHeart {
+      0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0.7; }
+      50% { transform: translateY(-30px) scale(1.2) rotate(10deg); }
+      100% { transform: translateY(-60px) scale(1) rotate(-10deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-r from-yellow-100 via-pink-100 to-purple-100 min-h-screen flex flex-col justify-center items-center relative overflow-hidden">
+
+  <!-- 💖 Heading -->
+  <h1 class="text-5xl font-bold text-pink-600 mb-8 drop-shadow-lg">
+    📸 {{ name }}'s Memories
+  </h1>
+
+  <!-- 📸 Memory Carousel -->
+  <div class="w-full max-w-4xl overflow-hidden rounded-3xl shadow-2xl border-4 border-pink-200">
+    <div class="animate-scroll space-x-6">
+      {% for photo in photos %}
+      <div class="photo-container">
+        <img src="{{ photo }}" class="h-72 rounded-xl shadow-lg hover:scale-105 transition duration-500">
+      </div>
+      {% endfor %}
+      <!-- Repeat images for infinite loop feel -->
+      {% for photo in photos %}
+      <div class="photo-container">
+        <img src="{{ photo }}" class="h-72 rounded-xl shadow-lg hover:scale-105 transition duration-500">
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- ⏭ Next Button -->
+  <a href="/hb/{{username}}/page3" 
+     class="mt-10 bg-gradient-to-r from-pink-500 to-purple-500 text-white text-lg px-8 py-3 rounded-full shadow-lg hover:scale-110 transition duration-300">
+    Next 🎂
+  </a>
+
+  <!-- ❤️ Add 3 floating hearts -->
+  <div class="heart" style="left: 25%; top: 20%; animation-delay: 0s;">❤️</div>
+  <div class="heart" style="left: 70%; top: 85%; animation-delay: 2s;">❤️</div>
+  <div class="heart" style="left: 40%; top: 10%; animation-delay: 4s;">❤️</div>
+  <div class="heart" style="left: 70%; top: 85%; animation-delay: 2s;">❤️</div>
+  <div class="heart" style="left: 90%; top: 70%; animation-delay: 4s;">❤️</div>
+</body>
+</html>
