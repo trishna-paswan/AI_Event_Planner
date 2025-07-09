@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Light Up My Life</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    body {
+      transition: background 2s ease, color 2s ease;
+    }
+    .fade-in {
+      animation: fadeIn 2s forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .glow-text {
+      text-shadow: 0 0 10px #f472b6, 0 0 20px #f472b6, 0 0 30px #f472b6;
+      animation: pulseGlow 3s infinite alternate;
+    }
+    @keyframes pulseGlow {
+      0% { text-shadow: 0 0 10px #f472b6; }
+      100% { text-shadow: 0 0 30px #f472b6; }
+    }
+    .floating-heart {
+      position: absolute;
+      font-size: 2.5rem;
+      animation: float 6s ease-in-out infinite;
+      opacity: 0.7;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(10deg); }
+    }
+  </style>
+</head>
+<body class="bg-black text-white flex flex-col justify-center items-center min-h-screen relative">
+
+  <!-- Floating Hearts -->
+  <div class="floating-heart text-pink-400" style="top: 10%; left: 20%;">💖</div>
+  <div class="floating-heart text-pink-300" style="top: 50%; left: 70%;">💝</div>
+  <div class="floating-heart text-pink-500" style="top: 80%; left: 40%;">💞</div>
+
+  <!-- Dark Screen Text -->
+  <p id="dark-text" class="text-xl mb-8 animate-pulse">🌑 It’s dark... let’s light it up!</p>
+
+  <!-- Turn On Lights Button -->
+  <button id="lightBtn" onclick="turnOnLights()"
+          class="bg-yellow-500 px-6 py-3 rounded-full shadow hover:scale-110 transition">
+    💡 Turn On Lights
+  </button>
+
+  <!-- Hidden Heartfelt Message -->
+  <div id="messageCard" class="hidden text-center fade-in">
+    <h1 class="text-5xl font-bold text-pink-600 glow-text mb-6 mt-8">💌 For {{ name }}</h1>
+    <p class="text-xl bg-white p-6 rounded-2xl shadow-2xl max-w-2xl text-gray-800 font-medium">
+      {{ message }}
+    </p>
+    <p class="mt-10 text-3xl text-purple-600 glow-text animate-bounce">Enjoy Your Day 💖</p>
+  </div>
+
+  <script>
+    function turnOnLights() {
+      // Change background and text color
+      document.body.classList.remove('bg-black', 'text-white');
+      document.body.classList.add('bg-gradient-to-br', 'from-pink-50', 'to-yellow-100', 'text-gray-800');
+
+      // Hide dark screen elements
+      document.getElementById('dark-text').style.display = 'none';
+      document.getElementById('lightBtn').style.display = 'none';
+
+      // Show heartfelt message
+      const card = document.getElementById('messageCard');
+      card.classList.remove('hidden');
+      card.classList.add('fade-in');
+
+      // Confetti burst 🎉
+      confetti({
+        particleCount: 300,
+        spread: 200,
+        origin: { y: 0.6 }
+      });
+    }
+  </script>
+
+</body>
+</html>
