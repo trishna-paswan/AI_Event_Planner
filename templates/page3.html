@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cut the Cake</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    /* 🎂 Cake styling (only layers & candle) */
+    .cake {
+      position: relative;
+      width: 200px;
+      height: 80px;
+      margin-bottom: 40px;
+    }
+    .cake-layer {
+      position: absolute;
+      width: 200px;
+      height: 30px;
+      background: #fbbf24;
+      border-radius: 10px;
+      box-shadow: inset 0 3px 0 #f59e0b;
+    }
+    .cake-layer:nth-child(1) { top: 50px; }
+    .cake-layer:nth-child(2) { top: 20px; width: 160px; left: 20px; background: #f472b6; box-shadow: inset 0 3px 0 #ec4899; }
+    .cake-top {
+      position: absolute;
+      width: 120px;
+      height: 20px;
+      background: #f87171;
+      border-radius: 50%;
+      top: 0;
+      left: 40px;
+      box-shadow: inset 0 2px 0 #ef4444;
+    }
+    .candle {
+      position: absolute;
+      width: 8px;
+      height: 25px;
+      background: #fcd34d;
+      top: -30px;
+      left: 96px;
+      border-radius: 3px;
+    }
+    .flame {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: radial-gradient(circle, #fbbf24, #f59e0b);
+      border-radius: 50%;
+      top: -42px;
+      left: 95px;
+      animation: flicker 1s infinite alternate;
+    }
+    @keyframes flicker {
+      from { transform: scale(1); opacity: 0.8; }
+      to { transform: scale(1.1); opacity: 1; }
+    }
+
+    /* 🎈 Balloon styling */
+    .balloon {
+      position: fixed;
+      top: -100px;
+      width: 30px;
+      height: 40px;
+      background: radial-gradient(circle at 30% 30%, #f87171, #ef4444);
+      border-radius: 50%;
+      animation: floatDown 6s linear forwards;
+    }
+    .balloon::after {
+      content: '';
+      position: absolute;
+      top: 40px;
+      left: 50%;
+      width: 2px;
+      height: 20px;
+      background: #4b5563;
+    }
+    @keyframes floatDown {
+      from { transform: translateY(0) rotate(0deg); }
+      to { transform: translateY(110vh) rotate(360deg); }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-pink-50 to-yellow-50 flex flex-col justify-center items-center min-h-screen text-center relative overflow-hidden">
+
+  <!-- 🎉 Text at Top -->
+  <h1 class="text-5xl font-bold text-pink-600 mb-6">🎂 Happy Birthday!</h1><br><br><br>
+
+  <!-- 🍰 Cake (clickable) -->
+  <div class="cake hover:scale-105 transition cursor-pointer" onclick="celebrate()">
+    <div class="cake-layer"></div>
+    <div class="cake-layer"></div>
+    <div class="cake-top"></div>
+    <div class="candle"></div>
+    <div class="flame"></div>
+  </div>
+
+  <p class="text-lg text-gray-700">Click the cake to celebrate 🎉</p>
+
+  <!-- 🎁 Next Button -->
+  <a href="/hb/{{username}}/page4" 
+     class="mt-10 bg-gradient-to-r from-pink-500 to-purple-500 text-white px-6 py-3 rounded-full shadow-lg hover:scale-105 transition"
+     onclick="celebrate()">
+    Next 💡
+  </a>
+
+  <script>
+    function celebrate() {
+      // 🎈 Release Balloons
+      for (let i = 0; i < 20; i++) {
+        const balloon = document.createElement('div');
+        balloon.className = 'balloon';
+        balloon.style.left = Math.random() * 100 + 'vw';
+        balloon.style.background = `radial-gradient(circle at 30% 30%, hsl(${Math.random()*360}, 70%, 60%), hsl(${Math.random()*360}, 70%, 40%))`;
+        balloon.style.animationDuration = (5 + Math.random() * 3) + 's';
+        document.body.appendChild(balloon);
+
+        // Remove balloon after animation
+        setTimeout(() => { balloon.remove(); }, 8000);
+      }
+
+      // 🎊 Confetti Burst
+      confetti({
+        particleCount: 200,
+        spread: 120,
+        origin: { y: 0.6 }
+      });
+    }
+  </script>
+
+</body>
+</html>
