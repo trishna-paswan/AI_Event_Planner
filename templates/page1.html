@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mirror of Memories</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* ❤️ Tiny Floating Hearts */
+    .heart {
+      position: absolute;
+      color: #f472b6; /* cute pastel pink */
+      font-size: 2rem;
+      animation: floatHeart 10s ease-in-out infinite;
+      opacity: 0.8;
+    }
+    @keyframes floatHeart {
+      0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0.8; }
+      50% { transform: translateY(-30px) scale(1.2) rotate(10deg); }
+      100% { transform: translateY(-60px) scale(1) rotate(-10deg); opacity: 0; }
+    }
+
+    /* 🪞 Glowing Floating Box */
+    .glow-card {
+      animation: softGlow 4s ease-in-out infinite alternate, floatBox 8s ease-in-out infinite;
+      backdrop-filter: blur(8px);
+      background: rgba(255, 255, 255, 0.3);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      transition: transform 0.5s ease-in-out;
+      position: relative;
+    }
+    @keyframes softGlow {
+      from {
+        box-shadow: 0 0 20px #fbbf24, 0 0 40px #f472b6, 0 0 60px #a78bfa;
+      }
+      to {
+        box-shadow: 0 0 30px #fcd34d, 0 0 50px #f9a8d4, 0 0 80px #c084fc;
+      }
+    }
+    @keyframes floatBox {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    /* 🌸 Soft Bounce Heading */
+    .soft-bounce {
+      animation: softBounce 5s ease-in-out infinite alternate;
+      color: #f472b6; /* pastel pink */
+    }
+    @keyframes softBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-pink-100 via-yellow-100 to-pink-50 flex items-center justify-center min-h-screen relative overflow-hidden">
+
+  <!-- 💕 Title -->
+  <h1 class="text-6xl font-bold soft-bounce drop-shadow-lg absolute top-16">
+     Mirror of Memories 
+  </h1>
+
+  <!-- 🪞 Unlock Card -->
+  <div onclick="window.location.href='/hb/{{username}}/page2'" 
+       class="glow-card p-16 rounded-3xl cursor-pointer hover:scale-105">
+    <p class="text-2xl text-gray-800 font-semibold">✨ Tap to Unlock Memories ✨</p>
+  </div>
+
+  <!-- ⏭ Next Button -->
+  <a href="/hb/{{username}}/page2" 
+     class="absolute bottom-10 right-10 bg-gradient-to-r from-pink-400 to-yellow-400 text-white px-6 py-3 rounded-full shadow-lg hover:scale-110 transition duration-300">
+    Next ➡️
+  </a>
+
+  <!-- ❤️ Add 2-3 Tiny Hearts -->
+  <div class="heart" style="left: 20%; top: 30%; animation-delay: 0s;">❤️</div>
+  <div class="heart" style="left: 80%; top: 60%; animation-delay: 2s;">❤️</div>
+  <div class="heart" style="left: 50%; top: 75%; animation-delay: 4s;">❤️</div>
+  <div class="heart" style="left: 90%; top: 25%; animation-delay: 4s;">❤️</div>
+  <div class="heart" style="left: 10%; top: 80%; animation-delay: 4s;">❤️</div>
+</body>
+</html>
