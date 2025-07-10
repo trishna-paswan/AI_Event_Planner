@@ -1,5 +1,6 @@
-# 🎉 HappyPage – Your Personalized Birthday Surprise 🎂
+# 🎂 HappyPage – The Cutest Birthday Surprise Ever 💖🎁
 
+🌟 *Make birthdays unforgettable!* 🌟 
 A magical and interactive birthday wish generator built with **Python Flask** and **Tailwind CSS**.  
 Create a unique link for your loved ones filled with:  
 ✨ Memories, 🎂 Virtual Cake Cutting, 💡 Surprises, and 💌 Heartfelt Messages.
@@ -12,8 +13,8 @@ Create a unique link for your loved ones filled with:
 - 🎂 **Cake Cutting Animation** – A fun virtual cake-cutting experience.
 - 💡 **Light Up Surprise** – Watch as the screen lights up with joy.
 - 💌 **Heartfelt Message** – A customized message to make their day extra special.
+- 🎁 **Shareable Link** – Send your personalized page link to friends 
 - 📱 **Globally Shareable Link** – Share via link or QR code.
-
 ---
 
 ## 🚀 Demo
@@ -21,14 +22,15 @@ Create a unique link for your loved ones filled with:
 
 ---
 
-## 🖤 Screenshots
-| Mirror of Memories     | Memory Carousel         | Cake Cutting           |
-|------------------------|-------------------------|-------------------------|
-| ![Mirror](static/screenshots/page1.png) | ![Carousel](static/screenshots/page2.png) | ![Cake](static/screenshots/page3.png) |
+## ❤️ Screenshots
+🌸 Mirror of Memories
+(Insert screenshot here)
 
-| Light Up Surprise      | Heartfelt Message       |
-|------------------------|-------------------------|
-| ![Lights](static/screenshots/page4.png) | ![Message](static/screenshots/page5.png) |
+🎂 Cake Cutting Page
+(Insert screenshot here)
+
+💡 Light Up My Life
+(Insert screenshot here)
 
 ---
 
@@ -36,8 +38,32 @@ Create a unique link for your loved ones filled with:
 - **Backend**: Python Flask 🐍
 - **Frontend**: Tailwind CSS 🌸, HTML5
 - **Animations**: Custom CSS, Tailwind Transitions
-- **Deployment**: Render / Railway 🌍
+- **Deployment**: Render 🌍
 
 ---
-✨ Author
+## 📁 Folder Structure
+bash
+HappyPage/
+│
+├── static/                        # 🍭 Static assets
+│   ├── uploads/                   # 📸 User uploaded photos
+│   ├── css/                       # 🎨 Custom CSS (Tailwind)
+│   ├── js/                        # ✨ JavaScript animations (confetti, carousel)
+│
+├── templates/                     # 📝 HTML Templates
+│   ├── index.html                 # 🎀 Homepage form
+│   ├── share.html                 # 🔗 Shareable link page
+│   ├── page1.html                 # 💕 Mirror of Memories
+│   ├── page2.html                 # 📸 Memory Carousel
+│   ├── page3.html                 # 🎂 Cake Cutting
+│   ├── page4.html                 # 💡 Light Up My Life
+│
+├── app.py                         # 🐍 Flask backend logic
+├── requirements.txt               # 📦 Python dependencies
+└── README.md                      # 📘 Project overview & setup guide
+
+---
+
+### ✨ Author
 Created with ❤️ by Trishna Paswan
+📧 Feel free to reach out for collaborations!
