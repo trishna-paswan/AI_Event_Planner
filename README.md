@@ -45,9 +45,7 @@ Create a unique link for your loved ones filled with: ✨ Memories, 🎂 Virtual
 HappyPage/
 │
 ├── static/                        # 🍭 Static assets
-│   ├── uploads/                   # 📸 User uploaded photos
-│   ├── css/                       # 🎨 Custom CSS (Tailwind)
-│   ├── js/                        # ✨ JavaScript animations (confetti, carousel)
+│   └── uploads/                   # 📸 User uploaded photos
 │
 ├── templates/                     # 📝 HTML Templates
 │   ├── index.html                 # 🎀 Homepage form
@@ -55,14 +53,29 @@ HappyPage/
 │   ├── page1.html                 # 💕 Mirror of Memories
 │   ├── page2.html                 # 📸 Memory Carousel
 │   ├── page3.html                 # 🎂 Cake Cutting
-│   ├── page4.html                 # 💡 Light Up My Life
+│   └── page4.html                 # 💡 Light Up My Life
 │
 ├── app.py                         # 🐍 Flask backend logic
 ├── requirements.txt               # 📦 Python dependencies
+├── Procfile                       # 🚀 Tells Render/Heroku how to run app
 └── README.md                      # 📘 Project overview & setup guide
 ````
 ---
 
+## 🎥 Demo Preview
+
+🌸 Mirror of Memories
+![Mirror of Memories](https://i.imgur.com/Y1M7oEz.gif)
+
+📸 Memory Carousel
+
+🎂 Cake Cutting Animation
+
+💡 Light Up My Life
+
+🎉 Full Journey (All Pages)
+
 ### ✨ Author
 Created with ❤️ by Trishna Paswan
+
 📧 Feel free to reach out for collaborations!
