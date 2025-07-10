@@ -10,10 +10,10 @@
       transition: background 2s ease, color 2s ease;
     }
     .fade-in {
-      animation: fadeIn 2s forwards;
+      animation: fadeIn 1.5s forwards;
     }
     @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.8); }
+      from { opacity: 0; transform: scale(0.95); }
       to { opacity: 1; transform: scale(1); }
     }
     .glow-text {
@@ -36,11 +36,11 @@
     }
   </style>
 </head>
-<body class="bg-black text-white flex flex-col justify-center items-center min-h-screen relative">
+<body class="bg-black text-white flex flex-col justify-center items-center min-h-screen relative overflow-hidden">
 
   <!-- Floating Hearts -->
   <div class="floating-heart text-pink-400" style="top: 10%; left: 20%;">💖</div>
-  <div class="floating-heart text-pink-300" style="top: 50%; left: 70%;">💝</div>
+  <div class="floating-heart text-pink-300" style="top: 50%; left: 80%;">💝</div>
   <div class="floating-heart text-pink-500" style="top: 80%; left: 40%;">💞</div>
 
   <!-- Dark Screen Text -->
@@ -48,26 +48,26 @@
 
   <!-- Turn On Lights Button -->
   <button id="lightBtn" onclick="turnOnLights()"
-          class="bg-yellow-500 px-6 py-3 rounded-full shadow hover:scale-110 transition">
+          class="bg-yellow-400 px-6 py-3 rounded-full shadow-lg text-xl hover:scale-110 transition">
     💡 Turn On Lights
   </button>
 
   <!-- Hidden Heartfelt Message -->
   <div id="messageCard" class="hidden text-center fade-in">
     <h1 class="text-5xl font-bold text-pink-600 glow-text mb-6 mt-8">💌 For {{ name }}</h1>
-    <p class="text-xl bg-white p-6 rounded-2xl shadow-2xl max-w-2xl text-gray-800 font-medium">
+    <p class="text-xl bg-white p-6 rounded-2xl shadow-2xl max-w-2xl text-gray-800 font-medium leading-relaxed">
       {{ message }}
     </p>
-    <p class="mt-10 text-3xl text-purple-600 glow-text animate-bounce">Enjoy Your Day 💖</p>
-  </div>
+    <p class="mt-10 text-2xl text-gray-800 animate-bounce">Enjoy Your Day 💖</p>
+ 
 
   <script>
     function turnOnLights() {
-      // Change background and text color
+      // Transition background & text
       document.body.classList.remove('bg-black', 'text-white');
       document.body.classList.add('bg-gradient-to-br', 'from-pink-50', 'to-yellow-100', 'text-gray-800');
 
-      // Hide dark screen elements
+      // Hide initial elements
       document.getElementById('dark-text').style.display = 'none';
       document.getElementById('lightBtn').style.display = 'none';
 
@@ -76,12 +76,27 @@
       card.classList.remove('hidden');
       card.classList.add('fade-in');
 
-      // Confetti burst 🎉
-      confetti({
-        particleCount: 300,
-        spread: 200,
-        origin: { y: 0.6 }
-      });
+      // 🎉 Confetti burst for 3 seconds
+      let duration = 3000;
+      let end = Date.now() + duration;
+
+      (function frame() {
+        confetti({
+          particleCount: 5,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 }
+        });
+        confetti({
+          particleCount: 5,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 }
+        });
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      }());
     }
   </script>
 
