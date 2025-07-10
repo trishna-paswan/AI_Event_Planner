@@ -24,6 +24,7 @@ Create a unique link for your loved ones filled with: ✨ Memories, 🎂 Virtual
 ## ❤️ Screenshots
 
 🌸 Mirror of Memories
+
 ![Mirror of Memories](Home.gif)
 
 🎂 Cake Cutting Page
@@ -32,6 +33,14 @@ Create a unique link for your loved ones filled with: ✨ Memories, 🎂 Virtual
 💡 Light Up My Life
 (Insert screenshot here)
 
+### 🎂 Cake Cutting
+![Cake Cutting](cake.gif)
+
+### 💡 Light Up My Life
+![Light Up My Life](last.gif)
+
+### 🌈 Full Flow
+![Full Flow](assets/full-flow.gif)
 ---
 
 ## 📦 Tech Stack
