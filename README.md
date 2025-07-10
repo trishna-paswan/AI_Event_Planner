@@ -39,8 +39,6 @@ Create a unique link for your loved ones filled with: ✨ Memories, 🎂 Virtual
 ### 💡 Light Up My Life
 ![Light Up My Life](last.gif)
 
-### 🌈 Full Flow
-![Full Flow](assets/full-flow.gif)
 ---
 
 ## 📦 Tech Stack
