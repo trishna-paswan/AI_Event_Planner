@@ -65,7 +65,7 @@ HappyPage/
 ## 🎥 Demo Preview
 
 🌸 Mirror of Memories
-![Mirror of Memories](https://i.imgur.com/Y1M7oEz.gif)
+![Mirror of Memories](Home.gif)
 
 📸 Memory Carousel
 
