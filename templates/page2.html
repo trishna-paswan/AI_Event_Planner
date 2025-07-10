@@ -5,10 +5,18 @@
   <title>Mirror of Memories</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Floating Hearts Animation */
+    .carousel-container {
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+    }
+    .carousel-container::-webkit-scrollbar {
+      display: none;  /* Chrome, Safari, Opera */
+    }
     .heart {
       position: absolute;
-      color: #f472b6; /* Soft Pink */
+      color: #f472b6;
       font-size: 1.8rem;
       animation: floatHeart 8s ease-in-out infinite;
       opacity: 0.8;
@@ -18,23 +26,48 @@
       50% { transform: translateY(-40px) scale(1.3) rotate(10deg); }
       100% { transform: translateY(-80px) scale(1) rotate(-10deg); opacity: 0; }
     }
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2.5rem;
+      color: #f472b6;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 9999px;
+      padding: 0.4rem 0.8rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease;
+      z-index: 50;
+    }
+    .arrow:hover {
+      transform: translateY(-50%) scale(1.1);
+    }
+    .arrow-left { left: 10px; }
+    .arrow-right { right: 10px; }
   </style>
 </head>
 <body class="bg-gradient-to-r from-pink-50 via-purple-50 to-pink-100 min-h-screen flex flex-col justify-center items-center relative overflow-hidden">
 
   <!-- 💖 Heading -->
-  <h1 class="text-5xl font-bold text-pink-600 mb-8 drop-shadow-lg">💕 Mirror of Memories 💕</h1>
+  <h1 class="text-5xl font-bold text-pink-600 mb-8 drop-shadow-lg animate-pulse">💕 Mirror of Memories 💕</h1>
 
   <!-- 📸 Carousel -->
-  <div class="relative w-full max-w-5xl px-6">
-    <div class="overflow-x-auto flex space-x-6 scrollbar-hide">
+  <div class="relative w-full max-w-5xl">
+    <div id="carousel" class="carousel-container flex space-x-4">
       {% for photo in photos %}
-      <div class="relative flex-shrink-0">
-        <img src="{{ photo }}" class="h-72 w-56 object-cover rounded-xl shadow-xl hover:scale-105 transition duration-500" />
-        <p class="absolute bottom-2 left-2 text-white font-semibold text-sm bg-black bg-opacity-40 px-2 py-1 rounded">❤️ A Memory</p>
+      <div class="photo-container flex-shrink-0 w-80">
+        <div class="relative">
+          <img src="{{ photo }}" class="h-96 w-full object-cover rounded-2xl shadow-xl hover:scale-105 transition duration-500" />
+          <p class="absolute bottom-2 left-2 text-white font-semibold text-sm bg-black bg-opacity-40 px-2 py-1 rounded">❤️ A Memory</p>
+        </div>
       </div>
       {% endfor %}
     </div>
+
+    <!-- Arrows -->
+    <div class="arrow arrow-left" onclick="scrollCarousel(-1)">&#8592;</div>
+    <div class="arrow arrow-right" onclick="scrollCarousel(1)">&#8594;</div>
   </div>
 
   <!-- 🎉 Next Page Button -->
@@ -51,5 +84,22 @@
   <div class="heart" style="left: 40%; top: 75%; animation-delay: 4s;">💖</div>
   <div class="heart" style="left: 70%; top: 30%; animation-delay: 3s;">💖</div>
   <div class="heart" style="left: 10%; top: 85%; animation-delay: 5s;">💖</div>
+
+  <script>
+    const carousel = document.getElementById('carousel');
+    const photoWidth = 340; // Approx width of .photo-container (adjust if needed)
+
+    function scrollCarousel(direction) {
+      carousel.scrollBy({
+        left: direction * photoWidth,
+        behavior: 'smooth'
+      });
+    }
+
+    // Auto-scroll
+    setInterval(() => {
+      scrollCarousel(1);
+    }, 5000); // Every 5 seconds
+  </script>
 </body>
 </html>
