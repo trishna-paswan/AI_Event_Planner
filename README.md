@@ -27,7 +27,7 @@ Create a unique link for your loved ones filled with: ✨ Memories, 🎂 Virtual
 ![Mirror of Memories](mirror.gif)
 
 ### 🎂 Cake Cutting
-![Cake Cutting](cake.gif)
+![Cake Cutting](cakee.gif)
 
 ### 💡 Light Up My Life
 ![Light Up My Life](last.gif)
