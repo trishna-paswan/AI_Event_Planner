@@ -23,15 +23,8 @@ Create a unique link for your loved ones filled with: ✨ Memories, 🎂 Virtual
 
 ## ❤️ Screenshots
 
-🌸 Mirror of Memories
-
-![Mirror of Memories](Home.gif)
-
-🎂 Cake Cutting Page
-(Insert screenshot here)
-
-💡 Light Up My Life
-(Insert screenshot here)
+###🌸 Mirror of Memories
+![Mirror of Memories](mirror.gif)
 
 ### 🎂 Cake Cutting
 ![Cake Cutting](cake.gif)
@@ -69,14 +62,6 @@ HappyPage/
 └── README.md                      # 📘 Project overview & setup guide
 ````
 ---
-
-📸 Memory Carousel
-
-🎂 Cake Cutting Animation
-
-💡 Light Up My Life
-
-🎉 Full Journey (All Pages)
 
 ### ✨ Author
 Created with ❤️ by Trishna Paswan
