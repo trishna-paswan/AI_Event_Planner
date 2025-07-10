@@ -2,8 +2,7 @@
 
 🌟 *Make birthdays unforgettable!* 🌟 
 A magical and interactive birthday wish generator built with **Python Flask** and **Tailwind CSS**.  
-Create a unique link for your loved ones filled with:  
-✨ Memories, 🎂 Virtual Cake Cutting, 💡 Surprises, and 💌 Heartfelt Messages.
+Create a unique link for your loved ones filled with: ✨ Memories, 🎂 Virtual Cake Cutting, 💡 Surprises, and 💌 Heartfelt Messages.
 
 ---
 
@@ -42,7 +41,7 @@ Create a unique link for your loved ones filled with:
 
 ---
 ## 📁 Folder Structure
-bash
+````markdown
 HappyPage/
 │
 ├── static/                        # 🍭 Static assets
@@ -61,7 +60,7 @@ HappyPage/
 ├── app.py                         # 🐍 Flask backend logic
 ├── requirements.txt               # 📦 Python dependencies
 └── README.md                      # 📘 Project overview & setup guide
-
+````
 ---
 
 ### ✨ Author
