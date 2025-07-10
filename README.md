@@ -23,7 +23,7 @@ Create a unique link for your loved ones filled with: ✨ Memories, 🎂 Virtual
 
 ## ❤️ Screenshots
 
-###🌸 Mirror of Memories
+### 🌸 Mirror of Memories
 ![Mirror of Memories](mirror.gif)
 
 ### 🎂 Cake Cutting
