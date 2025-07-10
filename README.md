@@ -22,8 +22,9 @@ Create a unique link for your loved ones filled with: ✨ Memories, 🎂 Virtual
 ---
 
 ## ❤️ Screenshots
+
 🌸 Mirror of Memories
-(Insert screenshot here)
+![Mirror of Memories](Home.gif)
 
 🎂 Cake Cutting Page
 (Insert screenshot here)
@@ -61,11 +62,6 @@ HappyPage/
 └── README.md                      # 📘 Project overview & setup guide
 ````
 ---
-
-## 🎥 Demo Preview
-
-🌸 Mirror of Memories
-![Mirror of Memories](Home.gif)
 
 📸 Memory Carousel
 
